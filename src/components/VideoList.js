@@ -15,10 +15,10 @@ const ListContainer = styled.ul`
 
   @media ${Breakpoints.laptop} {
     border-radius: 4px;
-    margin: 0 1rem 0 0;
-    height: 100%;
+    margin: 2.5rem 0 0 1rem;
     width: 25rem;
     background-color: ${props => props.theme.lighterBackground};
+    height: calc(100% - 2.5rem) !important;
 
     ::-webkit-scrollbar {
         background-color: ${props => props.theme.lighterBackground};

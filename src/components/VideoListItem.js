@@ -14,6 +14,7 @@ const VideoItem = styled.li`
   padding-left: .5rem;
   font-weight: 100;
   align-items: center;
+  background-color: ${props => props.selected ? props.theme.hover : "inherit"};
 
   > svg {
     margin-right: .1rem;
@@ -22,7 +23,6 @@ const VideoItem = styled.li`
   @media ${Breakpoints.laptop} {
     height: 1.75rem;
     font-size: 16px;
-    padding-left: 0;
     font-weight: normal;
   }
 
@@ -58,7 +58,7 @@ function VideoListItem(props) {
   }, [props.location.pathname, props.video]);*/
 
   return (
-    <VideoItem>
+    <VideoItem selected={props.selected}>
       {props.selected ? <FontAwesomeIcon size="xs" fixedWidth icon={faPlay} /> : ""}
       <VideoLink
         onClick={() => props.onSelected(props.video)}

@@ -34,7 +34,7 @@ const ContentContainer = styled.div`
     justify-content: center;
     align-items: center;
     height: 90vh;
-    width: 80%80%;
+    width: 80%;
   }
 `;
 
