@@ -4,27 +4,38 @@ import styled, { ThemeProvider } from "styled-components";
 import VideoPlayer from "./components/VideoPlayer";
 import VideoList from "./components/VideoList";
 import DarkTheme from "./theme/dark";
+import Breakpoints from "./styles/breakpoints";
+import GlobalStyle from "./styles/global";
 
 const AppContainer = styled.div`
-  background-color: ${props => props.theme.background};
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   font-size: calc(10px + 2vmin);
   color: ${props => props.theme.text.onDark};
 `;
 
 const AppHeader = styled.header`
-  margin-bottom: 1rem;
+  padding: .5rem;
+  height: 5vh;
+  display: flex;
+  align-items: center;
 `;
 
 const ContentContainer = styled.div`
   display: flex;
-  flex-direction: row;
-  width: 80%;
-  height: 75vh;
+  flex-direction: column;
+  
+  align-items: center;
+
+  @media ${Breakpoints.laptop} {
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    height: 90vh;
+    width: 80%80%;
+  }
 `;
 
 function App() {
@@ -32,14 +43,16 @@ function App() {
     <ThemeProvider theme={DarkTheme}>
       <Router>
         <AppContainer>
+          <GlobalStyle />
           <AppHeader>
             <div>Internet Video Archive</div>
           </AppHeader>
           <ContentContainer>
-            <VideoList />
             <Switch>
               <Route path="/:videoPath" children={<VideoPlayer />} />
+              <Route path="/" children={<VideoPlayer />} />
             </Switch>
+            <VideoList />
           </ContentContainer>
         </AppContainer>
       </Router>

@@ -1,16 +1,34 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import PropTypes from "prop-types";
 import VideoListItem from "./VideoListItem";
+import Breakpoints from "../styles/breakpoints";
 
 const ListContainer = styled.ul`
   overflow-x: hidden;
-  width: 25rem;
+  width: 99vw;
   list-style: none;
-  margin: 0 1rem 0 0;
+  margin: .5rem 0 0 0;
+  height: 57vh;
   padding: 0;
-  border: 1px solid grey;
+  
   flex-shrink: 0;
+
+  @media ${Breakpoints.laptop} {
+    border-radius: 4px;
+    margin: 0 1rem 0 0;
+    height: 100%;
+    width: 25rem;
+    background-color: ${props => props.theme.lighterBackground};
+
+    ::-webkit-scrollbar {
+        background-color: ${props => props.theme.lighterBackground};
+        border-radius: 10px;
+    }
+    ::-webkit-scrollbar-track {
+        background-color: ${props => props.theme.lighterBackground};
+        border-radius: 10px;
+    }
+  }
 `;
 
 function VideoList(props) {
@@ -19,22 +37,33 @@ function VideoList(props) {
 
   useEffect(() => {
     const getVideoList = async () => {
-      const response = await fetch(
-        `${window.location.protocol}//${window.location.host}/getVideos.php`
-      );
-      const json = await response.json();
-      setVideos(
+      let json;
+      try {
+        const response = await fetch(
+            `${window.location.protocol}//${window.location.host}/getVideos.php`
+          );
+        json = await response.json();
         json.sort((a, b) =>
           a.localeCompare(b, undefined, { sensitivity: "base" })
-        )
-      );
+        );
+      }
+      catch(err) {
+          console.warn("Did not receive a valid response from the server.")
+      }
+      
+      setVideos(json);
     };
-    getVideoList();
+    if (process.env.NODE_ENV === "development") {
+        setVideos(require("../testData/videos.json"));
+    }
+    else {
+        getVideoList();
+    }
   }, []);
 
   return (
     <ListContainer>
-      {videos.map((v) => (
+      {videos && videos.map((v) => (
         <VideoListItem
           key={v}
           video={v}
@@ -45,9 +74,5 @@ function VideoList(props) {
     </ListContainer>
   );
 }
-
-VideoList.propTypes = {
-  location: PropTypes.object.isRequired,
-};
 
 export default VideoList;

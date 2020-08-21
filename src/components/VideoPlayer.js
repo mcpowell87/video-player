@@ -5,16 +5,35 @@ import mime from "mime-types";
 import { useParams } from "react-router-dom";
 import "../../node_modules/video.js/dist/video-js.css";
 import { generateTitle } from '../util';
+import Breakpoints from '../styles/breakpoints';
 
 const VideoWrapper = styled.div`
-    height: auto;
-    width: 100%;
+    height: 34vh;
+    width: 99vw;
+
+    @media ${Breakpoints.laptop} {
+        height: 100%;
+        width: 65vw;
+    }
+
+    > .vjs-fill {
+        height: calc(100% - 2rem) !important;
+        @media ${Breakpoints.laptop} {
+            height: calc(100% - 2.5rem) !important;
+        }
+    }
 `;
 
-const VideoPlayerDiv = styled.div`
-    position: relative !important;
-    width: 100% !important;
-    height: auto !important;
+const VideoTitle = styled.div`
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    height: 2rem;
+
+    @media ${Breakpoints.laptop} {
+        font-size: 24px;
+        height: 2.5rem;
+    }
 `;
 
 function VideoPlayer() {
@@ -25,12 +44,13 @@ function VideoPlayer() {
   useEffect(() => {
     player.current = videojs(videoPlayer.current, {
       fill: true,
+      responsive: true,
       controls: true,
       preload: "auto",
     });
     return () => {
-      if (player) {
-        player.dispose();
+      if (player && player.current) {
+        player.current.dispose();
       }
     };
   }, []);
@@ -38,27 +58,24 @@ function VideoPlayer() {
   useEffect(() => {
       document.title = generateTitle(videoPath);
       if (player.current) {
-          player.current.src({
-              src: `${window.location.protocol}//${window.location.host}/files/videos/${encodeURIComponent(videoPath)}`,
-              type: mime.lookup(videoPath)
-          });
+          let src = {src: "", type: ""};
+          if (videoPath) {
+            src = {
+                src: `${window.location.protocol}//${window.location.host}/files/videos/${encodeURIComponent(videoPath)}`,
+                type: mime.lookup(videoPath)
+            }
+          }
+          player.current.src(src);
       }
   }, [videoPath])
 
-  if (!videoPath) {
-      return (<VideoWrapper></VideoWrapper>);
-  }
-
   return (
     <VideoWrapper>
-      <VideoPlayerDiv data-vjs-player>
+    <VideoTitle>Now Playing: {videoPath}</VideoTitle>
+      <div data-vjs-player>
         <video ref={videoPlayer} className="video-js vjs-big-play-centered">
-          <source
-            src={`${window.location.protocol}//${window.location.host}/files/videos/${videoPath}`}
-            type={mime.lookup(videoPath)}
-          />
         </video>
-      </VideoPlayerDiv>
+      </div>
     </VideoWrapper>
   );
 }
