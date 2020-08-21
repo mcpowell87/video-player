@@ -37,11 +37,10 @@ const VideoLink = styled(Link)`
   color: ${(props) => props.theme.text.onDark};
   text-decoration: none;
   width: 100%;
-  height: 100%;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
-  display: flex;
+  display: block;
   align-items: center;
 `;
 
