@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Link, withRouter, matchPath } from "react-router-dom";
 import styled from "styled-components";
 import PropTypes from "prop-types";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlay } from "@fortawesome/free-solid-svg-icons";
+import VideoListItem from "./VideoListItem";
 
 const ListContainer = styled.ul`
   overflow-x: hidden;
@@ -15,30 +13,9 @@ const ListContainer = styled.ul`
   flex-shrink: 0;
 `;
 
-const VideoItem = styled.li`
-  padding: 0.25rem;
-  color: ${(props) => props.theme.text.onDark};
-  display: flex;
-  height: 1.5rem;
-  align-items: center;
-
-  > svg {
-    margin-right: 0.5rem;
-  }
-`;
-
-const VideoLink = styled(Link)`
-  color: ${(props) => props.theme.text.onDark};
-  font-size: 16px;
-  text-decoration: none;
-  width: 100%;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
-`;
-
 function VideoList(props) {
   const [videos, setVideos] = useState([]);
+  const [selectedVideo, setSelectedVideo] = useState(null);
 
   useEffect(() => {
     const getVideoList = async () => {
@@ -53,35 +30,18 @@ function VideoList(props) {
       );
     };
     getVideoList();
-  });
-
-  const isSelected = (video) => {
-    return matchPath(props.location.pathname, { path: `/${video}` });
-  };
+  }, []);
 
   return (
     <ListContainer>
-      {videos.map((v) => {
-        return (
-          <VideoItem>
-            {isSelected(v) ? (
-              <FontAwesomeIcon size="sm" fixedWidth icon={faPlay} />
-            ) : (
-              ""
-            )}
-            <VideoLink title={v} to={{ pathname: `/${v}` }}>
-              {v}
-            </VideoLink>
-          </VideoItem>
-        );
-      })}
-      <VideoItem>
-        {isSelected("something.mp4") ? (
-          <FontAwesomeIcon size="xs" fixedWidth icon={faPlay} />
-        ) : (
-          ""
-        )}
-      </VideoItem>
+      {videos.map((v) => (
+        <VideoListItem
+          key={v}
+          video={v}
+          selected={selectedVideo === v}
+          onSelected={setSelectedVideo}
+        />
+      ))}
     </ListContainer>
   );
 }
@@ -90,4 +50,4 @@ VideoList.propTypes = {
   location: PropTypes.object.isRequired,
 };
 
-export default withRouter(VideoList);
+export default VideoList;
