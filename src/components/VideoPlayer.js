@@ -4,7 +4,7 @@ import videojs from "video.js";
 import mime from "mime-types";
 import { useParams } from "react-router-dom";
 import "../../node_modules/video.js/dist/video-js.css";
-import { generateTitle } from "../util";
+import { generateTitle, getFriendlyFilename } from "../util";
 import Breakpoints from "../styles/breakpoints";
 
 const VideoWrapper = styled.div`
@@ -83,7 +83,7 @@ function VideoPlayer() {
   return (
     <VideoWrapper>
       <VideoTitleContainer>
-        <VideoTitle title={videoPath}>Now Playing: {videoPath}</VideoTitle>
+        <VideoTitle title={videoPath}>Now Playing: {getFriendlyFilename(videoPath)}</VideoTitle>
       </VideoTitleContainer>
       <div data-vjs-player>
         <video

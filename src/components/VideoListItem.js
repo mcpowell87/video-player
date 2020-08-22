@@ -5,6 +5,7 @@ import PropTypes from "prop-types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlay } from "@fortawesome/free-solid-svg-icons";
 import Breakpoints from "../styles/breakpoints";
+import { getFriendlyFilename } from '../util';
 
 const VideoItem = styled.li`
   color: ${(props) => props.theme.text.onDark};
@@ -64,7 +65,7 @@ function VideoListItem(props) {
         title={props.video}
         to={{ pathname: `/${props.video}` }}
       >
-        {props.video}
+        {getFriendlyFilename(props.video)}
       </VideoLink>
     </VideoItem>
   );
