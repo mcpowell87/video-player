@@ -49,7 +49,6 @@ function App() {
           </AppHeader>
           <ContentContainer>
             <Switch>
-              <Route path="/:videoPath" children={<VideoPlayer />} />
               <Route path="/" children={<VideoPlayer />} />
             </Switch>
             <VideoList />

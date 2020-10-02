@@ -1,11 +1,12 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import videojs from "video.js";
 import mime from "mime-types";
-import { useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import "../../node_modules/video.js/dist/video-js.css";
 import { generateTitle, getFriendlyFilename } from "../util";
 import Breakpoints from "../styles/breakpoints";
+import settings from "../settings";
 
 const VideoWrapper = styled.div`
   height: 34vh;
@@ -48,7 +49,8 @@ const VideoTitle = styled.div`
 function VideoPlayer() {
   const videoPlayer = useRef();
   const player = useRef();
-  let { videoPath } = useParams();
+  const [videoPath, setVideoPath] = useState();
+  let location = useLocation();
 
   useEffect(() => {
     player.current = videojs(videoPlayer.current, {
@@ -65,20 +67,20 @@ function VideoPlayer() {
   }, []);
 
   useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    setVideoPath(searchParams.get("v"));
     document.title = generateTitle(videoPath);
     if (player.current) {
       let src = { src: "", type: "" };
       if (videoPath) {
         src = {
-          src: `${window.location.protocol}//${
-            window.location.host
-          }/files/videos/${encodeURIComponent(videoPath)}`,
+          src: `${settings.apiBase}/video?v=${encodeURIComponent(videoPath)}`,
           type: mime.lookup(videoPath),
         };
       }
       player.current.src(src);
     }
-  }, [videoPath]);
+  }, [location, videoPath]);
 
   return (
     <VideoWrapper>

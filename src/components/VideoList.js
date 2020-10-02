@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import VideoListItem from "./VideoListItem";
 import Breakpoints from "../styles/breakpoints";
+import settings from "../settings";
 
 const ListContainer = styled.ul`
   overflow-x: hidden;
@@ -39,9 +40,8 @@ function VideoList(props) {
     const getVideoList = async () => {
       let json;
       try {
-        const response = await fetch(
-            `${window.location.protocol}//${window.location.host}/getVideos.php`
-          );
+          const url = `${settings.apiBase}/videos`;
+          const response = await fetch(url);
         json = await response.json();
         json.sort((a, b) =>
           a.localeCompare(b, undefined, { sensitivity: "base" })
@@ -49,16 +49,12 @@ function VideoList(props) {
       }
       catch(err) {
           console.warn("Did not receive a valid response from the server.")
+          console.error(err);
       }
       
       setVideos(json);
     };
-    if (process.env.NODE_ENV === "development") {
-        setVideos(require("../testData/videos.json"));
-    }
-    else {
-        getVideoList();
-    }
+      getVideoList();
   }, []);
 
   return (

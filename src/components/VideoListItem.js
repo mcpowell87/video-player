@@ -63,7 +63,7 @@ function VideoListItem(props) {
       <VideoLink
         onClick={() => props.onSelected(props.video)}
         title={props.video}
-        to={{ pathname: `/${props.video}` }}
+        to={{ pathname: '/', search: `?v=${encodeURIComponent(props.video)}` }}
       >
         {getFriendlyFilename(props.video)}
       </VideoLink>

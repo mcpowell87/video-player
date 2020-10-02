@@ -2,6 +2,7 @@
   "name": "video-player",
   "version": "0.1.0",
   "private": true,
+  "author": "mcpowell87",
   "homepage": "/video",
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.30",
